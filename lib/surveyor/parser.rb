@@ -186,7 +186,6 @@ module SurveyorParserSurveyMethods
     })
   end
 end
-end
 
 # SurveySection model
 module SurveyorParserSurveyTranslationMethods
