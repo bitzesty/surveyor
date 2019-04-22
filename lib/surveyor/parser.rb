@@ -335,6 +335,7 @@ module SurveyorParserDependencyConditionMethods
       :question_reference => a0.to_s.gsub(/^q_|^question_/, ""),
       :rule_key => reference_identifier
     }.merge( a2.is_a?(Hash) ? a2 : { :answer_reference => a2.to_s.gsub(/^a_|^answer_/, "") })).dependency_condition
+    binding.remote_pry
     context[:dependency].dependency_conditions << context[:dependency_condition] = self
     context[:dependency_conditions] << self
   end
@@ -500,7 +501,7 @@ module SurveyorParserValidationConditionMethods
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
       rule_key: reference_identifier
     }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
-    binding.remote_pry
+    # binding.remote_pry
     context[:validation].validation_conditions << context[:validation_condition] = self
     context[:validation_conditions] << self
   end
