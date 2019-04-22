@@ -468,6 +468,7 @@ module SurveyorParserValidationMethods
     context.delete_if{|k,v| %w(validation validation_condition).map(&:to_sym).include? k}
 
     # build and set context
+    binding.remote_pry
     self.attributes = PermittedParams.new(args[0] || {}).validation
     context[:answer].validations << context[:validation] = self
   end
