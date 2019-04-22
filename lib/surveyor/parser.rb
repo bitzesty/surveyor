@@ -503,6 +503,6 @@ module SurveyorParserValidationConditionMethods
     }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
     # binding.remote_pry
     context[:validation].validation_conditions << context[:validation_condition] = self
-    context[:validation_conditions] << self
+    # context[:validation_conditions] << self
   end
 end
