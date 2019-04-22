@@ -468,7 +468,6 @@ module SurveyorParserValidationMethods
     context.delete_if{|k,v| %w(validation validation_condition).map(&:to_sym).include? k}
 
     # build and set context
-    binding.remote_pry
     self.attributes = PermittedParams.new(args[0] || {}).validation
     context[:answer].validations << context[:validation] = self
   end
@@ -489,7 +488,7 @@ module SurveyorParserValidationConditionMethods
     # a0, a1 = args
     # self.attributes = PermittedParams.new({
     #   :operator => a0 || "==",
-    #   :rule_key => reference_identifier}.merge(a1 || {})).validation_condition
+    #   :rule_key => reference_identifier}.merge(a1 || {})}.merge(a1 || {})).validation_condition
     # context[:validation].validation_conditions << context[:validation_condition] = self
 
     # clear context
@@ -498,10 +497,11 @@ module SurveyorParserValidationConditionMethods
     # build and set context
     a0, a1, a2 = args
     self.attributes = PermittedParams.new({
-      operator: a1 || '==',
+      operator: a0 || '==',
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
       rule_key: reference_identifier
-    }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
+    # }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
+    }.merge(a1 || {})).validation_condition
     context[:validation].validation_conditions << context[:validation_condition] = self
     context[:validation_conditions] << self
   end
