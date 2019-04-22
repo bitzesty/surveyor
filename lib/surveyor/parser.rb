@@ -396,8 +396,21 @@ module SurveyorParserAnswerMethods
   end
 end
 
+
+# # clear context
+# [ :dependency,
+#   :dependency_condition ].each{|k| context.delete k}
+
+# # build and set context
+# self.attributes = PermittedParams.new(args[0] || {}).dependency
+# if context[:question]
+#   context[:dependency] = context[:question].dependency = self
+# elsif context[:question_group]
+#   context[:dependency] = context[:question_group].dependency = self
+# end
+
 # Validation model
-module SurveyorParserValidationMethods
+module SurveyorParserValidationsMethods
   def parse_and_build(context, args, original_method, reference_identifier)
     # clear context
     [ :validation,
@@ -406,22 +419,89 @@ module SurveyorParserValidationMethods
     context.delete_if{|k,v| %w(validation validation_condition).map(&:to_sym).include? k}
 
     # build and set context
-    self.attributes = PermittedParams.new({:rule => "A"}.merge(args[0] || {})).validation
+    self.attributes = PermittedParams.new(args[0] || {}).validation
+    context[:answer].validations << context[:validation] = self
+  end
+end
+
+# DependencyCondition model
+module SurveyorParserValidationConditionsMethods
+  DependencyCondition.instance_eval do
+    # attr_accessor :question_reference, :answer_reference
+    attr_accessor :answer_reference
+  end
+
+  def parse_and_build(context, args, original_method, reference_identifier)
+    # clear context
+    context.delete :validation_condition
+
+    # build and set context
+    a0, a1, a2 = args
+    self.attributes = PermittedParams.new({
+      operator: a1 || '==',
+      question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
+      rule_key: reference_identifier
+    }.merge(a2.is_a?(Hash) ? a2 : { answer_reference: a2.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
+    context[:validation].validation_conditions << context[:validation_condition] = self
+    context[:validation_conditions] << self
+  end
+end
+
+# Validation model
+module SurveyorParserValidationMethods
+  def parse_and_build(context, args, original_method, reference_identifier)
+    # # clear context
+    # [ :validation,
+    #   :validation_condition ].each{|k| context.delete k}
+
+    # context.delete_if{|k,v| %w(validation validation_condition).map(&:to_sym).include? k}
+
+    # # build and set context
+    # self.attributes = PermittedParams.new({:rule => "A"}.merge(args[0] || {})).validation
+    # context[:answer].validations << context[:validation] = self
+
+    # clear context
+    [ :validation,
+      :validation_condition ].each{|k| context.delete k}
+
+    context.delete_if{|k,v| %w(validation validation_condition).map(&:to_sym).include? k}
+
+    # build and set context
+    self.attributes = PermittedParams.new(args[0] || {}).validation
     context[:answer].validations << context[:validation] = self
   end
 end
 
 # ValidationCondition model
 module SurveyorParserValidationConditionMethods
+  DependencyCondition.instance_eval do
+    # attr_accessor :question_reference, :answer_reference
+    attr_accessor :answer_reference
+  end
+
   def parse_and_build(context, args, original_method, reference_identifier)
+    # clear context
+    # context.delete :validation_condition
+
+    # # build and set context
+    # a0, a1 = args
+    # self.attributes = PermittedParams.new({
+    #   :operator => a0 || "==",
+    #   :rule_key => reference_identifier}.merge(a1 || {})).validation_condition
+    # context[:validation].validation_conditions << context[:validation_condition] = self
+
     # clear context
     context.delete :validation_condition
 
+    binding.remote_pry
     # build and set context
-    a0, a1 = args
+    a0, a1, a2 = args
     self.attributes = PermittedParams.new({
-      :operator => a0 || "==",
-      :rule_key => reference_identifier}.merge(a1 || {})).validation_condition
+      operator: a1 || '==',
+      # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
+      rule_key: reference_identifier
+    }.merge(a2.is_a?(Hash) ? a2 : { answer_reference: a2.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
     context[:validation].validation_conditions << context[:validation_condition] = self
+    context[:validation_conditions] << self
   end
 end
