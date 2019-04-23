@@ -475,7 +475,7 @@ end
 
 # ValidationCondition model
 module SurveyorParserValidationConditionMethods
-  DependencyCondition.instance_eval do
+  ValidationCondition.instance_eval do
     # attr_accessor :question_reference, :answer_reference
     attr_accessor :answer_reference
   end
@@ -497,11 +497,12 @@ module SurveyorParserValidationConditionMethods
     # build and set context
     binding.remote_pry
     a0, a1, a2 = args
+    # answer_reference = context[:answer].reference_identifier
     self.attributes = PermittedParams.new({
       operator: a0 || '==',
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
       rule_key: reference_identifier
-    }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
+    }.merge(a0.is_a?(Hash) ? a0 : { answer_reference:  })).validation_condition
     context[:validation].validation_conditions << context[:validation_condition] = self
     context[:validation_conditions] << self
   end
