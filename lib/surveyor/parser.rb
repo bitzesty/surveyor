@@ -495,13 +495,13 @@ module SurveyorParserValidationConditionMethods
     context.delete :validation_condition
 
     # build and set context
+    binding.remote_pry
     a0, a1, a2 = args
     self.attributes = PermittedParams.new({
       operator: a0 || '==',
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
       rule_key: reference_identifier
-    # }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
-    }.merge(a1 || {})).validation_condition
+    }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: a0.to_s.gsub(/^a_|^answer_/, '') })).validation_condition
     context[:validation].validation_conditions << context[:validation_condition] = self
     context[:validation_conditions] << self
   end
