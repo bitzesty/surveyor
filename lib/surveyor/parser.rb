@@ -499,6 +499,7 @@ module SurveyorParserValidationConditionMethods
     answer_reference = {
       answer_reference: context[:answer].reference_identifier
     }
+    binding.remote_pry
     self.attributes = PermittedParams.new({
       operator: a0 || '==',
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
