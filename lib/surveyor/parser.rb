@@ -501,7 +501,7 @@ module SurveyorParserValidationConditionMethods
       operator: a0 || '==',
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
       rule_key: reference_identifier
-    }.merge(a0.is_a?(Hash) ? a0 : { answer_reference: answer_reference })).validation_condition
+    }.merge(a1 || {}).merge(answer_reference: answer_reference)).validation_condition
     context[:validation].validation_conditions << context[:validation_condition] = self
     context[:validation_conditions] << self
   end
