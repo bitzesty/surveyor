@@ -496,12 +496,14 @@ module SurveyorParserValidationConditionMethods
 
     # build and set context
     a0, a1 = args
-    answer_reference = context[:answer].reference_identifier
+    answer_reference = {
+      answer_reference: context[:answer].reference_identifier
+    }
     self.attributes = PermittedParams.new({
       operator: a0 || '==',
       # question_reference: a0.to_s.gsub(/^q_|^question_/, ''),
       rule_key: reference_identifier
-    }.merge(a1 || {}).merge(answer_reference: answer_reference)).validation_condition
+    }.merge(a1 || {}).merge(answer_reference || {})).validation_condition
     context[:validation].validation_conditions << context[:validation_condition] = self
     context[:validation_conditions] << self
   end
