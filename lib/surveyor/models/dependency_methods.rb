@@ -38,11 +38,11 @@ module Surveyor
       def is_met?(response_set)
         ch = conditions_hash(response_set)
         return false if ch.blank?
-        # logger.debug "rule: #{self.rule.inspect}"
-        # logger.debug "rexp: #{rgx.inspect}"
-        # logger.debug "keyp: #{ch.inspect}"
-        # logger.debug "subd: #{self.rule.gsub(rgx){|m| ch[m.to_sym]}}"
         rgx = Regexp.new(self.dependency_conditions.map{|dc| ["a","o"].include?(dc.rule_key) ? "\\b#{dc.rule_key}(?!nd|r)\\b" : "\\b#{dc.rule_key}\\b"}.join("|")) # exclude and, or
+        logger.debug "rule: #{self.rule.inspect}"
+        logger.debug "rexp: #{rgx.inspect}"
+        logger.debug "keyp: #{ch.inspect}"
+        logger.debug "subd: #{self.rule.gsub(rgx){|m| ch[m.to_sym]}}"
         eval(self.rule.gsub(rgx){|m| ch[m.to_sym]})
       end
 
