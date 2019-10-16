@@ -4,6 +4,7 @@ Surveyor::Engine.routes.draw do
   match '/:survey_code', :to                         => 'surveyor#export', :as => 'export_survey', :via     => :get
   match '/:survey_code/:response_set_code', :to      => 'surveyor#show', :as   => 'view_my_survey', :via    => :get
   match '/:survey_code/:response_set_code/take', :to => 'surveyor#edit', :as   => 'edit_my_survey', :via    => :get
-  match '/:survey_code/:response_set_code', :to      => 'surveyor#update', :as => 'update_my_survey', :via  => :put
+  put '/:survey_code/:response_set_code', :to      => 'surveyor#update', :as => 'update_my_survey' # deprecated, try to use POST version instead
+  post '/:survey_code/:response_set_code', :to      => 'surveyor#update_and_delete_dependent_responses', :as => 'update_and_delete_responses'
   match '/:survey_code/:response_set_code/:question_id', :to => 'surveyor#delete_response', :as => 'delete_response', :via  => :delete
 end
