@@ -17,7 +17,7 @@ module Surveyor
         # Validations
         validates_presence_of :operator, :rule_key
         validate :validates_operator
-        validates_uniqueness_of :rule_key, :scope => :dependency_id
+        validates_uniqueness_of :rule_key, case_sensitive: true, scope: :dependency_id
       end
 
       module ClassMethods

@@ -12,7 +12,7 @@ module Surveyor
 
         # Validations
         validates_presence_of :locale, :translation
-        validates_uniqueness_of :locale, :scope => :survey_id
+        validates_uniqueness_of :locale, case_sensitive: true, scope: :survey_id
       end
 
       # Instance Methods

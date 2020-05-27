@@ -14,7 +14,7 @@ module Surveyor
         # Validations
         validates_presence_of :operator, :rule_key
         validates_inclusion_of :operator, :in => Surveyor::Common::OPERATORS
-        validates_uniqueness_of :rule_key, :scope => :validation_id
+        validates_uniqueness_of :rule_key, case_sensitive: true, scope: :validation_id
       end
 
       # Instance Methods

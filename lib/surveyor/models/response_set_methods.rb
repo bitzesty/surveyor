@@ -16,7 +16,7 @@ module Surveyor
         # Validations
         validates_presence_of :survey_id
         validates_associated :responses
-        validates_uniqueness_of :access_code
+        validates_uniqueness_of :access_code, case_sensitive: true
 
         # Derived attributes
         before_create :ensure_start_timestamp
