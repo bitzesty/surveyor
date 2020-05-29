@@ -23,7 +23,7 @@ module Surveyor
 
         # Generated attributes.  Use before_validation instead of before_save so that generated attributes have values before the validates_uniqueness is applied.
         before_validation :generate_access_code
-        before_save :increment_version
+        before_validation :increment_version
       end
 
       module ClassMethods
@@ -82,11 +82,12 @@ module Surveyor
       end
 
       def increment_version
+        return if survey_version_changed? # Explicitly set
+
         current_version = self.class.where(:access_code => access_code)
                                     .maximum(:survey_version)
-                                    .to_i
 
-        self.survey_version = current_version.zero? ? 0 : (current_version + 1)
+        self.survey_version = current_version.nil? ? 0 : (current_version + 1)
       end
 
       def translation(locale_symbol)
