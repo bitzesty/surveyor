@@ -23,7 +23,7 @@ module Surveyor
 
         # Generated attributes.  Use before_validation instead of before_save so that generated attributes have values before the validates_uniqueness is applied.
         before_validation :generate_access_code
-        before_validation :increment_version
+        before_save :increment_version
       end
 
       module ClassMethods
