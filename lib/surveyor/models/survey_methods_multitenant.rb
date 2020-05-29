@@ -17,7 +17,9 @@ module Surveyor
 
         # Validations
         validates_presence_of :title
-        #validates_uniqueness_of :survey_version, :scope => :access_code, :message => "survey with matching access code and version already exists"   #this validation (including study_id scope) will be added back in the multitenant project (using acts_as_tenant) implementation of this module.
+        # this validation (including study_id scope) will be added back in the
+        # multitenant project (using acts_as_tenant) implementation of this module.
+        #validates_uniqueness_of :survey_version, :scope => :access_code, :message => "survey with matching access code and version already exists"
 
         # Generated attributes.  Use before_validation instead of before_save so that generated attributes have values before the validates_uniqueness is applied.
         before_validation :generate_access_code
