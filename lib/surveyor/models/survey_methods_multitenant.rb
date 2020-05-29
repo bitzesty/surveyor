@@ -24,6 +24,7 @@ module Surveyor
         # Generated attributes.  Use before_validation instead of before_save so that generated attributes have values before the validates_uniqueness is applied.
         before_validation :generate_access_code
         before_validation :increment_version
+        before_validation :set_display_order
       end
 
       module ClassMethods
@@ -43,7 +44,6 @@ module Surveyor
 
       def default_args
         self.api_id ||= Surveyor::Common.generate_api_id
-        self.display_order ||= Survey.count
       end
 
       def active?
@@ -95,6 +95,12 @@ module Surveyor
         {:title => self.title, :description => self.description}.with_indifferent_access.merge(
           t ? YAML.load(t.translation || "{}").with_indifferent_access : {}
         )
+      end
+
+      private
+
+      def set_display_order
+        self.display_order ||= Survey.count
       end
     end
   end
