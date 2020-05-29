@@ -82,9 +82,11 @@ module Surveyor
       end
 
       def increment_version
-        surveys = self.class.select(:survey_version).where(:access_code => access_code).order("survey_version DESC")
-        next_version = surveys.any? ? surveys.first.survey_version.to_i + 1 : 0
-        self.survey_version = next_version
+        current_version = self.class.where(:access_code => access_code)
+                                    .maximum(:survey_version)
+                                    .to_i
+
+        self.survey_version = current_version.zero? ? 0 : (current_version + 1)
       end
 
       def translation(locale_symbol)
