@@ -17,11 +17,14 @@ module Surveyor
 
         # Validations
         validates_presence_of :title
-        #validates_uniqueness_of :survey_version, :scope => :access_code, :message => "survey with matching access code and version already exists"   #this validation (including study_id scope) will be added back in the multitenant project (using acts_as_tenant) implementation of this module.
+        # this validation (including study_id scope) will be added back in the
+        # multitenant project (using acts_as_tenant) implementation of this module.
+        #validates_uniqueness_of :survey_version, :scope => :access_code, :message => "survey with matching access code and version already exists"
 
         # Generated attributes.  Use before_validation instead of before_save so that generated attributes have values before the validates_uniqueness is applied.
         before_validation :generate_access_code
         before_validation :increment_version
+        before_validation :set_display_order
       end
 
       module ClassMethods
@@ -41,7 +44,6 @@ module Surveyor
 
       def default_args
         self.api_id ||= Surveyor::Common.generate_api_id
-        self.display_order ||= Survey.count
       end
 
       def active?
@@ -80,9 +82,12 @@ module Surveyor
       end
 
       def increment_version
-        surveys = self.class.select(:survey_version).where(:access_code => access_code).order("survey_version DESC")
-        next_version = surveys.any? ? surveys.first.survey_version.to_i + 1 : 0
-        self.survey_version = next_version
+        return if survey_version_changed? # Explicitly set
+
+        current_version = self.class.where(:access_code => access_code)
+                                    .maximum(:survey_version)
+
+        self.survey_version = current_version.nil? ? 0 : (current_version + 1)
       end
 
       def translation(locale_symbol)
@@ -90,6 +95,12 @@ module Surveyor
         {:title => self.title, :description => self.description}.with_indifferent_access.merge(
           t ? YAML.load(t.translation || "{}").with_indifferent_access : {}
         )
+      end
+
+      private
+
+      def set_display_order
+        self.display_order ||= Survey.count
       end
     end
   end
