@@ -1,9 +1,12 @@
 object @survey
-attribute :title
+attribute title: :translated_title
 attribute :api_id                       => :uuid
 attribute :finish_button_text
 node(:description,                  :if => lambda {|s| !s.description.blank? }){|s| s.description }
 node(:reference_identifier,         :if => lambda {|s| !s.reference_identifier.blank? }){|s| s.reference_identifier }
+node :translated_title do |s|
+  s.translation(:es).title
+end
 
 child :sections => :sections do
   attributes :title, :display_order
