@@ -15,7 +15,7 @@ child :sections => :sections do
     attribute :api_id                   => :uuid
     attribute :is_mandatory
     attribute :question_button_text
-    node(:text,                     :if => lambda { |q| q.is_a?(Question)}){ |q| q.split(q.translation(:es).text, :pre) }
+    node(:text,                     :if => lambda { |q| q.is_a?(Question)}){ |q| q.split(q.text, :pre) }
     node(:text,                     :if => lambda { |q| q.is_a?(QuestionGroup)}){ |q| q.text }
     node(:help_text,                :if => lambda { |q| !q.help_text.blank? }){ |q| q.help_text }
     node(:reference_identifier,     :if => lambda { |q| !q.reference_identifier.blank? }){ |q| q.reference_identifier }
