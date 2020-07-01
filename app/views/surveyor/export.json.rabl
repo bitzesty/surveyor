@@ -1,5 +1,5 @@
 object @survey
-attribute :translated_title
+attribute title: :translated_title
 attribute :api_id                       => :uuid
 attribute :finish_button_text
 node(:description,                  :if => lambda {|s| !s.description.blank? }){|s| s.description }
