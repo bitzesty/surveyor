@@ -3,7 +3,7 @@ attribute :title
 attribute :api_id                       => :uuid
 attribute :finish_button_text
 node :translated_title do |s|
-  s.tranlated_title
+  s.translated_title
 end
 node(:description,                  :if => lambda {|s| !s.description.blank? }){|s| s.description }
 node(:reference_identifier,         :if => lambda {|s| !s.reference_identifier.blank? }){|s| s.reference_identifier }
