@@ -37,7 +37,7 @@ child :sections => :sections do
       attribute :api_id                 => :uuid
       node(:help_text,              :if => lambda { |a| !a.help_text.blank? }){ |a| a.help_text }
       node(:exclusive,              :if => lambda { |a| a.is_exclusive }){ |a| a.is_exclusive }
-      node(:text, :if => lambda { |a| a.display_type != "image" }){ |a| a.split(a.text, :pre) }
+      node(:text, :if => lambda { |a| a.display_type != "image" }){ |a| a.split(a.translation(I18n.locale)['text'], :pre) }
       node(:url,  :if => lambda { |a| a.display_type == "image" }){ |a| a.split(a.text, :pre) }
 
       node(:post_text,              :if => lambda { |a| !a.split(a.text, :post).blank? }){ |a| a.split(a.text, :post) }
