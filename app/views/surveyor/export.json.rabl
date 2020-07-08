@@ -1,15 +1,13 @@
 object @survey
-attribute :title
+node(:title) {|s| s.translation(I18n.locale)['title']}
 attribute :api_id                       => :uuid
 attribute :finish_button_text
-node :translated_title do |s|
-  s.translated_title
-end
 node(:description,                  :if => lambda {|s| !s.description.blank? }){|s| s.description }
 node(:reference_identifier,         :if => lambda {|s| !s.reference_identifier.blank? }){|s| s.reference_identifier }
 
 child :sections => :sections do
   attributes :title, :display_order
+  node(:title) { |s| s.translation(I18n.locale) }
   node(:description,                :if => lambda {|s| !s.description.blank? }){|s| s.description }
   node(:reference_identifier,       :if => lambda {|s| !s.reference_identifier.blank? }){|s| s.reference_identifier }
 
@@ -19,7 +17,7 @@ child :sections => :sections do
     attribute :is_mandatory
     attribute :question_button_text
     node(:text,                     :if => lambda { |q| q.is_a?(Question)}){ |q| q.split(q.translation(I18n.locale)['text'], :pre) }
-    node(:text,                     :if => lambda { |q| q.is_a?(QuestionGroup)}){ |q| q.text }
+    node(:text,                     :if => lambda { |q| q.is_a?(QuestionGroup)}){ |q| q.translation(I18n.locale)['text'] }
     node(:help_text,                :if => lambda { |q| !q.help_text.blank? }){ |q| q.help_text }
     node(:reference_identifier,     :if => lambda { |q| !q.reference_identifier.blank? }){ |q| q.reference_identifier }
     node(:data_export_identifier,   :if => lambda { |q| !q.data_export_identifier.blank? }){ |q| q.data_export_identifier }
@@ -74,7 +72,7 @@ child :sections => :sections do
 
     child(:questions, :if => lambda{|x| x.is_a?(QuestionGroup)}) do
       attributes :api_id => :uuid
-      node(:text){ |q| q.split(q.text, :pre) }
+      node(:text){ |q| q.split(q.translation(I18n.locale)['text'], :pre) }
       node(:post_text, :if => lambda { |q| !q.split(q.text, :post).blank? }){ |q| q.split(q.text, :post) }
       node(:help_text, :if => lambda { |q| !q.help_text.blank? }){ |q| q.help_text }
       node(:reference_identifier, :if => lambda { |q| !q.reference_identifier.blank? }){ |q| q.reference_identifier }
@@ -88,7 +86,7 @@ child :sections => :sections do
         attributes :api_id => :uuid
         node(:help_text, :if => lambda { |a| !a.help_text.blank? }){ |a| a.help_text }
         node(:is_exclusive, :if => lambda { |a| a.is_exclusive }){ |a| a.is_exclusive }
-        node(:text){ |a| a.split(a.text, :pre) }
+        node(:text){ |a| a.split(a.translation(I18n.locale)['text'], :pre) }
         node(:post_text, :if => lambda { |a| !a.split(a.text, :post).blank? }){ |a| a.split(a.text, :post) }
         node(:type, :if => lambda { |a| a.response_class != "answer" }){ |a| a.response_class }
         node(:reference_identifier,   :if => lambda { |a| !a.reference_identifier.blank? }){ |a| a.reference_identifier }
