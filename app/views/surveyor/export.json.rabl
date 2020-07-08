@@ -7,7 +7,7 @@ node(:reference_identifier,         :if => lambda {|s| !s.reference_identifier.b
 
 child :sections => :sections do
   attributes :title, :display_order
-  node(:title) { |s| s.translation(I18n.locale) }
+  node(:title) { |s| s.translation(I18n.locale)['title'] }
   node(:description,                :if => lambda {|s| !s.description.blank? }){|s| s.description }
   node(:reference_identifier,       :if => lambda {|s| !s.reference_identifier.blank? }){|s| s.reference_identifier }
 
